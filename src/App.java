@@ -1,5 +1,6 @@
 import java.util.ArrayList;
-import java.util.List; 
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -134,51 +135,7 @@ while (inCombat) {
 
 
             case 1:
-            // Sistema para elegir a que enemigo se le desea hacer daño
-                System.out.println("\nElige a qué enemigo atacar:");
-                for (int i = 0; i < enemy.size(); i++) {
-                    Characters e = enemy.get(i);
-                    System.out.println((i + 1) + ". " + e.getName() + " (HP: " + e.getHP() + ")");
-                }
-
-                System.out.print("Opción: ");
-                int targetIndex = sc.nextInt() - 1;
-
-                if (targetIndex >= 0 && targetIndex < enemy.size()) {
-                    Characters objetivo = enemy.get(targetIndex);
-                    int damage = actual.getAtack();
-                    
-                    // Aqui si el daño es mayor a la defensa del bojetivo entonces se le hara daño, si el daño es mayor a la suma de la vida y la defensa, afectara a la vida
-                    // En caso de que el daño no sea suficiente para sobrepasar la defensa del enemigo la vida quedara intacta al igual que la defensa
-                    if(damage > objetivo.getDefense()){
-                        objetivo.setHP((objetivo.getHP() + objetivo.getDefense()) - damage);
-
-                        System.out.println(actual.getName() + " atacó a " + objetivo.getName() +
-                        " e hizo " + damage + " puntos de daño.");  
-                        System.out.println(actual.getName() + " Le ha bajado " + damage + " puntos de daño a la defensa de " + objetivo.getName());
-                        System.out.println(actual.getName() + " tiene " + actual.getHP() + " puntos de vida");
-
-                    }else {
-                    // Si el daño no es mayor a la defensa el enemigo mitigara por completo el daño del ataque
-                        objetivo.getHP();
-                        System.out.println("La defensa del enemigo a mitigado el daño por completo");
-                    }
-
-                    // Aqui simplemente si la vida es 0 o igula a 0 entronces el enemigo habra sido derrotado
-                    if (objetivo.getHP() <= 0) {
-                        System.out.println(objetivo.getName() + " ha sido derrotado!");
-                        enemy.remove(objetivo);
-                        OrdenAtaque.remove(objetivo); // ya no debe tener turno
-                    }else {
-                        // Si no se le bajo la vida por completo mostrara el daño realizado, por cuanto mitigo el ataque la defensa y la vida con la que el enemigo quedo
-                        // Esto si es que el ataque sobrepaso la defensa, si no la vida no sera disminuida
-                        System.out.print(actual.getName() + " a realizado " + damage + " puntos de daño ");
-                        System.out.println(objetivo.getName() + " mitigo el daño gracias a su defensa de " + objetivo.getDefense() + "\n" + 
-                                            objetivo.getName() + " Quedo con " + objetivo.getHP() + " puntos de vida");
-                    }
-                } else {
-                    System.out.println("Opción no válida.");
-                }
+                AtaqueCasos(enemy, OrdenAtaque, listaCharacters, actual, sc, false, true);
                 break;
 
             case 2:
@@ -190,50 +147,7 @@ while (inCombat) {
 
 
             case 3:
-                // Lanzar una habilidad funciona casi igual que atacar ya que se decide un enemigo al cual atacar 
-                System.out.println("\nElige a qué enemigo atacar:");
-                for (int i = 0; i < enemy.size(); i++) {
-                    Characters e = enemy.get(i);
-                    System.out.println((i + 1) + ". " + e.getName() + " (HP: " + e.getHP() + ")");
-                }
-
-                // Se le asigna una opcion de a cual enemigo desea atacar
-                System.out.print("Opción: ");
-                int targetIndex2 = sc.nextInt() - 1; 
-                
-                // condicional que permite saber filtrar si la opcion es mayor o igual a 0 y si es menor al tamaño de la lista de enemigos podras continuar con el ataque
-                if(targetIndex2 >= 0 && targetIndex2 < enemy.size()){
-                    Characters objetivo = enemy.get(targetIndex2);
-                    int damage = actual.usarHabilidad(0);
-
-                    // Se usa la misma logica que con el ataque, si la habilidad hace mas daño que la vida y la defensa juntas entonces le disminuira la vida
-                    // Misma logica que en ataque (case 1)
-                    if(damage > objetivo.getDefense()){
-                        objetivo.setHP((objetivo.getHP() + objetivo.getDefense()) - damage);
-                        System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " con " + actual.verHabilidad(0) + 
-                        " e hizo " + damage + " puntos de daño.");   
-                        System.out.println(actual.getName() + " Le ha bajado " + damage + " puntos de daño a la defensa de " + objetivo.getName());
-
-                    }else {
-                        
-                        objetivo.getHP();
-                        System.out.println(actual.getName() + " ha atacado con " + actual.verHabilidad(0));
-                        System.out.println("La defensa del enemigo a mitigado el daño por completo");
-                    }
-
-                    if (objetivo.getHP() <= 0){
-                        System.out.println(objetivo.getName() + " ha sido derrotado");
-                        enemy.remove(objetivo);
-                        OrdenAtaque.remove(objetivo);
-                    }else {
-                        System.out.print(actual.getName() + " a realizado " + damage + " puntos de daño ");
-                        System.out.println(objetivo.getName() + " mitigo el daño gracias a su defensa de " + objetivo.getDefense() + "\n" +
-                                            objetivo.getName() + " Quedo con " + objetivo.getHP() + " puntos de vida");
-                    }
-
-                } else {
-                    System.out.println("Opción no válida.");
-                }
+                AtaqueCasos(enemy, OrdenAtaque, listaCharacters, actual, sc, true, true);
                 break;               
 
             // opcion para huir del combate
@@ -255,22 +169,10 @@ while (inCombat) {
             Characters objetivo = listaCharacters.get((int)(Math.random() * listaCharacters.size()));
 
             switch (accion) {
-                // Aqui nuevamente se rehusa el codigo de acciones donde sigue la misma logica de vida + defensa menos el daño
-                // Añadiendole el factor random para que cada enemigo decida una accion diferente
+                // Aqui nuevamente se rehusa el codigo de acciones
                 case 1:
 
-                    int damage = actual.getAtack();
-        
-                    if(damage > objetivo.getDefense()){
-                        objetivo.setHP((objetivo.getHP() + objetivo.getDefense()) - damage);
-                        System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damage + " de daño.");
-                        System.out.println(actual.getName() + " Le ha bajado " + damage + " puntos de daño a la defensa de " + objetivo.getName());
-                    } else {
-        
-                        objetivo.getHP();
-                        System.out.print(actual.getName() + " a realizado " + damage + " puntos de daño ");
-                        System.out.println(objetivo.getName() + " Ha mitigado el daño gracias a su defensa de " + objetivo.getDefense() + "\n" + objetivo.getName() + " quedo con " + objetivo.getHP() + " Puntos de vida");
-                    }
+                AtaqueCasos(enemy, OrdenAtaque, listaCharacters, actual, sc, false, false);
                     
                     break;
 
@@ -283,20 +185,7 @@ while (inCombat) {
 
                 case 3:
 
-                    int damageSkill = actual.usarHabilidad(0);
-                    if(damageSkill > objetivo.getDefense()){
-                        objetivo.setHP((objetivo.getHP() + objetivo.getDefense()) - damageSkill);
-                        System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " con " + actual.verHabilidad(0) + 
-                        " e hizo " + damageSkill + " puntos de daño.");  
-                        System.out.println(actual.getName() + " Le ha bajado " + damageSkill + " puntos de daño a la defensa de " + objetivo.getName());
-                        System.out.println(actual.getName() + " ha quedaod con " + actual.getHP() + " puntos de vida");
-
-                    }else {
-
-                        objetivo.getHP();
-                        System.out.println(actual.getName() + " ha atacado con " + actual.verHabilidad(0));
-                        System.out.println("La defensa del enemigo " + objetivo.getName() +" a mitigado el daño por completo");
-                    }
+                    AtaqueCasos(enemy, OrdenAtaque, listaCharacters, actual, sc, true, false);
 
                     break;
             }
@@ -319,7 +208,7 @@ while (inCombat) {
         turnIndex = 0;
         System.out.println("\n--- Nuevo turno ---");
 
-        for (Characters c : listaCharacters) {
+        for (Characters c : OrdenAtaque) {
         if (c.getDefense() % 2 == 0 && c.getDefense() > 0) {
             c.setDefense(c.getDefense() / 2);
         }
@@ -329,4 +218,147 @@ while (inCombat) {
     }
 
     }
+public static void AtaqueCasos(
+    ArrayList<Characters> enemy,
+    ArrayList<Characters> OrdenAtaque,
+    ArrayList<Characters> listaCharacters,
+    Characters actual,
+    Scanner sc,
+    boolean EsHabilidad,
+    boolean EsJugador
+    ){
+        if(EsJugador == true){
+            System.out.println("\nElige a qué enemigo atacar:");
+            for (int i = 0; i < enemy.size(); i++) {
+                Characters e = enemy.get(i);
+                System.out.println((i + 1) + ". " + e.getName() + " (HP: " + e.getHP() + ")");
+            }
+            // Se le asigna una opcion de a cual enemigo desea atacar
+            System.out.print("Opción: ");
+            int targetIndex2 = sc.nextInt() - 1; 
+                if(EsHabilidad == true){
+                    // condicional que permite filtrar si la opcion es mayor o igual a 0 y si es menor al tamaño de la lista de enemigos podras continuar con el ataque
+                    if(targetIndex2 >= 0 && targetIndex2 < enemy.size()){
+                        Characters objetivo = enemy.get(targetIndex2);
+                        // se recila el codigo en el caso 1, tan solo cambiando el daño por el daño de la habilidad
+                        int damage = (actual.usarHabilidad(0) - (objetivo.getDefense() / 2));  
+                        if(damage < 0){
+                            damage = 0;
+                            System.out.println("Tu ataque no tuvo efecto");
+                        }else {   
+                            // si el daño es mayor a 0 se le merma la cantidad de daño al objetivo
+                            objetivo.setHP(objetivo.getHP() - damage);
+                            // condicional por si el daño termina sobrepasando la vida no muestre la vida en negativos 
+                            if(objetivo.getHP() < 0){
+                                int saludObjetivo = 0;
+                                System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " Con " + actual.verHabilidad(0) + " e hizo " + damage + " puntos de daño.");  
+                                System.out.println(objetivo.getName() + " tiene " + saludObjetivo + " puntos de vida");       
+                            }else{
+                                System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damage + " puntos de daño.");
+                                System.out.println(objetivo.getName() + " tiene una defensa muy elevada");  
+                                System.out.println(objetivo.getName() + " tiene " + objetivo.getHP() + " puntos de vida");
+                            }
+                            }
+                            if (objetivo.getHP() <= 0){
+                                System.out.println(objetivo.getName() + " ha sido derrotado");
+                                enemy.remove(objetivo);
+                                OrdenAtaque.remove(objetivo);
+                            };
+                            } else {
+                                System.out.println("Opción no válida.");
+                            }  
+    
+                        } else {
+                            if (targetIndex2 >= 0 && targetIndex2 < enemy.size()) {
+                                Characters objetivo = enemy.get(targetIndex2);
+                                int damage = (actual.getAtack() - (objetivo.getDefense() / 2));
+                                // si el daño es menor a 0 volver el daño igual a 0 para no tener datos negativos
+                                if(damage < 0){
+                                    damage = 0;
+                                    System.out.println("Tu ataque no tuvo efecto");
+                                }else {
+                                    // si el daño es mayor a 0 se le merma la cantidad de daño al objetivo
+                                    objetivo.setHP(objetivo.getHP() - damage);
+                                    // condicional por si el daño termina sobrepasando la vida no muestre la vida en negativos 
+                                    if(objetivo.getHP() < 0){
+                                        int saludObjetivo = 0;
+                                        System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damage + " puntos de daño.");  
+                                        System.out.println(objetivo.getName() + " tiene " + saludObjetivo + " puntos de vida");
+                                    }
+                                    else{
+                                        System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damage + " puntos de daño.");
+                                        System.out.println(objetivo.getName() + " tiene una defensa muy elevada");  
+                                        System.out.println(objetivo.getName() + " tiene " + objetivo.getHP() + " puntos de vida");
+                                    }
+                                }
+                                // Aqui simplemente si la vida es 0 o igula a 0 entronces el enemigo habra sido derrotado
+                                if (objetivo.getHP() <= 0) {
+                                    System.out.println(objetivo.getName() + " ha sido derrotado!");
+                                    enemy.remove(objetivo);
+                                    OrdenAtaque.remove(objetivo); // ya no debe tener turno
+                                };
+                            } else {
+                                System.out.println("Opción no válida.");
+                            }
+                        }
+        }else {
+            // accion va a ser igual a un numero random que puede ser 3 opciones (atacar, defenderse y habilidad)
+            Characters objetivo = listaCharacters.get((int)(Math.random() * listaCharacters.size()));
+            if(EsHabilidad == true){
+
+                int damageSkill = actual.usarHabilidad(0) - (objetivo.getDefense() / 2);
+                    if(damageSkill < 0){
+                        damageSkill = 0;
+                        System.out.println("Tu ataque no tuvo efecto");
+                    }else {
+                        objetivo.setHP(objetivo.getHP() - damageSkill);
+
+                        if(objetivo.getHP() < 0){
+                            int saludObjetivo = 0;
+                            System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damageSkill + " puntos de daño.");  
+                            System.out.println(objetivo.getName() + " tiene " + saludObjetivo + " puntos de vida"); 
+                        }
+                        else{
+                            System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damageSkill + " puntos de daño.");
+                            System.out.println(objetivo.getName() + " tiene una defensa muy elevada");  
+                            System.out.println(objetivo.getName() + " tiene " + objetivo.getHP() + " puntos de vida");
+                        }
+                            // Aqui simplemente si la vida es 0 o igula a 0 entronces el enemigo habra sido derrotado
+                            if (objetivo.getHP() <= 0) {
+                                    System.out.println(objetivo.getName() + " ha sido derrotado!");
+                                    enemy.remove(objetivo);
+                                    OrdenAtaque.remove(objetivo); // ya no debe tener turno
+                            };                                              
+                    }
+            } else {
+                int damage = actual.getAtack() - (objetivo.getDefense() / 2);
+                    if(damage < 0 ){
+                        damage = 0;
+                        System.out.println("Tu ataque no tuvo efecto");
+                    } else {    
+                        objetivo.setHP(objetivo.getHP() - damage);
+                        if(objetivo.getHP() < 0){
+                            int saludObjetivo = 0;
+                            System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damage + " puntos de daño.");  
+                            System.out.println(objetivo.getName() + " tiene " + saludObjetivo + " puntos de vida");    
+                        }
+                        else{
+                            System.out.println(actual.getName() + " atacó a " + objetivo.getName() + " e hizo " + damage + " puntos de daño.");
+                            System.out.println(objetivo.getName() + " tiene una defensa muy elevada");  
+                            System.out.println(objetivo.getName() + " tiene " + objetivo.getHP() + " puntos de vida");
+                        }
+                            // Aqui simplemente si la vida es 0 o igula a 0 entronces el enemigo habra sido derrotado
+                            if (objetivo.getHP() <= 0) {
+                                System.out.println(objetivo.getName() + " ha sido derrotado!");
+                                enemy.remove(objetivo);
+                                OrdenAtaque.remove(objetivo); // ya no debe tener turno
+                             };
+                    }
+            }
+
+
+        }
+            
+    }
 }
+
