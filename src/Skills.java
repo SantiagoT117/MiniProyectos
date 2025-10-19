@@ -4,7 +4,7 @@ public enum Skills {
     YANGUS("Stun Axe", 30),
     ANGELO("Falcon Cut",15),
     JESSICA("Hellfire",18),
-    ENEMIGO1("Placaje", 10),
+    ENEMIGO1("Placaje", 15),
     ENEMIGO2("Cura total" , 6),
     ENEMIGO3("Defensa Ferrea", 4),
     ENEMIGO4("Bola de Fuego", 13),

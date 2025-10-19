@@ -122,5 +122,10 @@ public class Characters {
     public void agregarSkill(Skills s){
         Skill.add(s);
     }
+
+    public String verHabilidad(int indice){
+        Skills s = getSkill(indice);
+        return s.getNombreS();
+    }
     
 }

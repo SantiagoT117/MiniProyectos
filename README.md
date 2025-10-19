@@ -1,2 +1,10 @@
 # Miniproyectos-Programacion-Orientada-a-Eventos
 # Santiago-Torres-Rojas-2380301
+
+# Teniendo en cuenta que ahora estoy de forma individual en esta segunda entrega del mini proyecto, se uso parte del codigo de la primer entrega y se hicieron cambios significativos en el menu, que es lo que mas ha cambiado, esto mas el añadido de skills un enum con parametros con el nombre de la habilidad y el daño que esta hace.
+
+# Primeramente tenemos 3 listas distintas, una de ellas contiene a los personajes principales, otra tiene solo a los enemigos y la última los tiene a todos juntos, esto facilitará más adelante funciones como poder organizar el orden de ataque según la velocidad de los personajes.
+
+# Continuando, empezamos con la lógica de combate. Antes de entrar al combate tenemos el dato TurnIndex que nos ayudará a seguir los turnos según a quién le toque. Entrando al while vemos que primero está la lógica para saber si se ha ganado o perdido, se hizo con 2 condicionales que nos ayudarán a revisar las 2 listas, la que tiene solo a los personajes y la que tiene solo a los enemigos, y si estas están vacías puede determinar si se ha ganado la batalla o no. Estas se irán actualizando según lo que pase en la batalla.
+
+# 2 commit / Para este segundo commit se centralizó más en la mejora de ciertas funciones, mejorando el sistema de IA de los enemigos para que estos también puedan atacar, defenderse y usar habilidades. Sin embargo, es un sistema mejorable, por lo que se podría tomar este commit como una versión beta. La idea es mejorar el sistema de ataque de IA según el tipo de enemigo y añadir habilidades que no solo ataquen, sino que también mejoren atributos de los personajes. También se añadió la segunda opción del menú de batalla, que es el uso de la defensa; este se basa en duplicar la defensa del personaje en ese turno, y una vez empiece otro turno se le devolverá la defensa inicial que tenía el personaje que decidió defenderse. Y ya para finalizar, también se desea cambiar el sistema de salud + defensa, ya que este sigue una lógica la cual, aunque funciona, puede mejorar.
