@@ -3,12 +3,24 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+// importacion de libreria con flatlaf para personalizar la gui
+import com.formdev.flatlaf.FlatDarkLaf;
+import javax.swing.UIManager;
 
 //ejemplo para verificar que todo este funcionando 
 
 public class App {
     public static void main(String[] args) throws Exception{
         Scanner sc = new Scanner(System.in);
+         
+        // try catch que nos permite personalizar la GUI y avisarnos si hay algun problema
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        new GUI();
 
         // Listas donde se almacenaran las habilidades de cada personaje y de los enemigos segun su tipo de comportamiento
 
@@ -39,13 +51,13 @@ public class App {
         angelo.agregarSkill(Skills.ANGELO);
 
         
-        Enemy limo = new Enemy("Limo", 3, 5, 10, 3, 2, 1f, 1, 2f, 2, new ArrayList<>(), TypeEnemy.AGGRESSIVE);
+        Enemy limo = new Enemy("Geyser", 150, 20, 25, 20, 18, 1f, 10, 2f, 20, new ArrayList<>(), TypeEnemy.AGGRESSIVE);
         limo.agregarSkill(Skills.ENEMIGO1);
         Enemy berenjeno = new Enemy("Berenjeno", 5, 11, 9, 3, 6, 1f, 2, 1f, 1, new ArrayList<>(), TypeEnemy.HEALER);
         berenjeno.agregarSkill(Skills.ENEMIGO2);
         Enemy pinchorugo = new Enemy("Pinchorugo", 10, 5, 7, 10, 3, 3f, 1, 2f, 1, new ArrayList<>(), TypeEnemy.DEFENSIVE);
         pinchorugo.agregarSkill(Skills.ENEMIGO3);
-        Enemy labibabosa = new Enemy("Labibabosa", 10, 10, 50, 2, 20, 5f, 5, 1f, 1, new ArrayList<>(), TypeEnemy.SORCERER);
+        Enemy labibabosa = new Enemy("Labibabosa", 10, 10, 50, 2, 5, 5f, 5, 1f, 1, new ArrayList<>(), TypeEnemy.SORCERER);
         labibabosa.agregarSkill(Skills.ENEMIGO4);
         // Listas con todos los personajes y enemigos 
 
@@ -361,4 +373,3 @@ public static void AtaqueCasos(
             
     }
 }
-
