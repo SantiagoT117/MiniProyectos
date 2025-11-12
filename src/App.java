@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 // importacion de libreria con flatlaf para personalizar la gui
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.UIManager;
 
 //ejemplo para verificar que todo este funcionando 
@@ -15,7 +15,7 @@ public class App {
          
         // try catch que nos permite personalizar la GUI y avisarnos si hay algun problema
         try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
+            UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception e) {
             e.printStackTrace();
         }

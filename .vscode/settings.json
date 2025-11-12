@@ -1,8 +1,5 @@
 {
-  "java.project.referencedLibraries": [
-    "flatlaf-3.6.2.jar"
-  ],
-  "java.debug.settings": {
-    "vmArgs": "-cp .;flatlaf-3.6.2.jar"
-  }
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ]
 }
